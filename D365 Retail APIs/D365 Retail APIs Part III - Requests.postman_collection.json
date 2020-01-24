@@ -1,0 +1,168 @@
+{
+	"info": {
+		"_postman_id": "67371fe8-4cbb-47b7-b19c-6815b7ebf6ce",
+		"name": "D365 Retail APIs Part III - Requests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "D365 Retail APIs",
+			"item": [
+				{
+					"name": "Customers/CreateCustomer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7ab951ef-17ab-4e20-88bd-fa2d374a7ec8",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "bearer {{General_bearerTokenRetail}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "oun",
+								"value": "052"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"FirstName\": \"D365 Test\",\n\t\"LastName\": \"Retail API 1\",\n\t\"Language\": \"en-ie\",\n\t\"CustomerGroup\": \"30\",\n\t\"CurrencyCode\": \"USD\"\n}"
+						},
+						"url": {
+							"raw": "{{General_RetailServer}}/Commerce/Customers?api-version=7.3",
+							"host": [
+								"{{General_RetailServer}}"
+							],
+							"path": [
+								"Commerce",
+								"Customers"
+							],
+							"query": [
+								{
+									"key": "api-version",
+									"value": "7.3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "450a585a-67d6-4042-8e79-c55f2ee7045c",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "f502b915-9865-43f2-9d1a-93b36b55a67d",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Get AAD Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a1049e26-405e-42be-a07b-f4cc5e554d9d",
+						"exec": [
+							"var json = JSON.parse(responseBody);",
+							"tests[\"Get AAD Token\"] = !json.error && responseBody !== '' && responseBody !== '{}' && json.access_token !== '';",
+							"postman.setEnvironmentVariable(\"General_bearerTokenRetail\", json.access_token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "grant_type",
+							"value": "{{General_grant_type}}",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{General_client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{General_client_secret}}",
+							"type": "text"
+						},
+						{
+							"key": "resource",
+							"value": "{{General_RetailServer}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://login.microsoftonline.com/:tenant_id/oauth2/token",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						":tenant_id",
+						"oauth2",
+						"token"
+					],
+					"variable": [
+						{
+							"key": "tenant_id",
+							"value": "{{General_tenant_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
